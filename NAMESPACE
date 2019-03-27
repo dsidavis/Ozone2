@@ -1,7 +1,10 @@
 import(Rcpp)
 import(methods)
 import(rstantools)
-importFrom(rstan,sampling)
+import(parallel)
+importFrom(haven, read_sas)
+importFrom(rstan,sampling, optimizing, extract)
+
 useDynLib(OzoneExposure, .registration = TRUE)
 
 export(readSAS, mungeSAS)

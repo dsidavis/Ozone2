@@ -13,8 +13,7 @@
 The DESCRIPTION file:
 \packageDESCRIPTION{OzoneExposure}
 \packageIndices{OzoneExposure}
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+
 }
 \author{
 \packageAuthor{OzoneExposure}
@@ -22,13 +21,11 @@ The DESCRIPTION file:
 Maintainer: \packageMaintainer{OzoneExposure}
 }
 \references{
-~~ Literature or other references for background information ~~
+  Stan <mc-stan.org>
 }
 \keyword{ package }
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
 }
 \examples{
-~~ simple examples of the most important functions ~~
+
 }
