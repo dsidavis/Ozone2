@@ -1,5 +1,7 @@
 # Simulation of data with normal error for testing
-
+if(FALSE){
+    # Old code for use with R functions -
+    # not correct format for using with Stan functions
 sim_data = function(O3, Ve, CD, t, #inputs
                     Dos, K, A, n, # parameters
                     sigma) #error 
@@ -29,4 +31,5 @@ sim_experiment = function(O3 = rep(rep(c(0.123, 0), each = 2), 3),
                Ve = Ve,
                t_stop = t_stop)
     
+}
 }
