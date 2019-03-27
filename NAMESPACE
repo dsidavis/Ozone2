@@ -1,0 +1,9 @@
+import(Rcpp)
+import(methods)
+import(rstantools)
+importFrom(rstan,sampling)
+useDynLib(OzoneExposure, .registration = TRUE)
+
+export(readSAS, mungeSAS)
+export(stanmodels)
+export(fit_McDonnel, fit_Schelegle)
