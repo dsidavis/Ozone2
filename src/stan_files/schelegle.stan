@@ -88,10 +88,10 @@ data{
   int Time[n_obs,max_timepts];
   int dFEV1_measure_idx[n_obs, max_n_dFEV1];
   vector[max_n_dFEV1] dFEV1[n_obs];
-  real<upper < 0> k;
+  real<lower = 0> k;
   real dos;
-  real<lower < 0> a;
-  real<lower < 0> sigma;
+  real<upper = 0> a;
+  real<lower = 0> sigma;
 }
 transformed data{
   /* real k = 0.02; */
