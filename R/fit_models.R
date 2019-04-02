@@ -13,29 +13,31 @@ fit_McDonnel = function(data, sigma_u = 0.1,
 }
 
 fit_Schelegle = function(data,
-                         bounds = list(dos = c(5, 2500), a = c(-0.2, 0),
-                                       k = c(0, 0.2), sigma = c(0.01,5)),
+                         bounds = list(dos = c(5, 2500), a = c(-0.2, -1e-5),
+                                       k = c(1e-6, 0.2), sigma = c(1e-5,5)),
                          n_interval = 50L,
                          model = OzoneExposure::stanmodels$schelegle,
-                         cores = 1L)
+                         cores = 1L, ...)
 {
     grid = expand_bounds(bounds, n_interval)
+       
     if(cores > 1){
         cl = makeCluster(cores, "FORK")
         on.exit(stopCluster(cl))
         ans = parApply(cl, grid, 1, function(x) 
-            fit_eds(model, data, x))
+            fit_eds(model, data, x, ...))
     } else
         ans = apply(grid, 1, function(x)
-            fit_eds(model, data, x))
+            fit_eds(model, data, x, ...))
     
     return(cbind(grid, aic = ans))
 }
 
-fit_eds = function(mod, data, pars)
+fit_eds = function(mod, data, pars, ...)
 {
     data = c(data, pars)
-    fit = rstan::sampling(mod, data, algorithm = "Fixed_param", iter = 1, chains = 1)
+    fit = rstan::sampling(mod, data, algorithm = "Fixed_param",
+                          iter = 1, chains = 1, ...)
     rstan::extract(fit, pars = "aic")$aic
 }
 
