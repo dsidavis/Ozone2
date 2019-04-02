@@ -2,6 +2,11 @@
 title: "Getting Started: the OzoneExposure package"
 author: "Matt Espe"
 date: "2 Apr 2019"
+output: pdf_document
+vignette: 
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{rmarkdown::render}
+  \usepackage[utf8]{inputenc}
 ---
 
 # Introduction to the package
@@ -122,17 +127,22 @@ The list object created by `mungeSAS` can directly be fed into a
 model, for example the McDonnell model;
 
 ```{r}
-result = fit_McDonnel(aro_model_data)
-result["aic",]
+result = fit_McDonnel(aro_model_data, n_optim = 10)
+min(result$aic)
 ```
 
 or the Schelegle model,
 
-```{r}
-result2 = fit_Schelegle(aro_model_data)
-result["aic",]
+```{r results = "hide"}
+result2 = fit_Schelegle(aro_model_data, n_interval = 5)
 ```
 
+```{r}
+result2[which.min(result2$aic),]
+```
 
+We can then explore which combination of parameters give us the lowest
+AIC values,
 
-
+```{r}
+sapply(results
