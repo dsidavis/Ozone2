@@ -25,6 +25,10 @@ humans. These two models are from the following publications:
   Marion (2012) Modelling of individual subject ozone exposure response
   kinetics, Inhalation Toxicology, 24:7, 401-415
   
+For convenience, we have named the models according to the
+last name of the first author, e.g. the McDonnell model and the
+Schelegle model.
+
 Both models predict changes in the FEV1 measure (delta FEV1 or dFEV1
 hereafter) over time after exposure to different ozone
 concentrations. The data used to fit these models is from a series of
@@ -32,29 +36,33 @@ experiments conducted at UC-Davis and by the EPA. Each model has been
 coded in Stan, a language for probabilistic inference (see
 [mc-stan.org](mc-stan.org)), to increase the speed at which
 calculations are done and hence to speed up the model fitting
-process. Each model is compiled on package install. 
+process. Each model is compiled on package install, so the
+installation process takes a little while, but thereafter should be
+pretty quick.
 
 ## Model fitting procedures
 
 We discovered that both models can confound a traditional numerical
 optimizer due to multiple local maxima present in the response
-surface. Therefore, each model needs a slightly different approach in
+surface. Therefore, neither model can be reliably optimized in a
+single shot. However, each model needs a slightly different approach in
 order to find the global optima. 
 
 For the Schelegle model: This model only has 4 parameters when fit
 using the log-likelihood: DOS, K, A, and the residual error
-(simga). Therefore, we found that a grid search was possible to
+(sigma). Therefore, we found that a grid search was possible to
 explore the response surface. In short, we form a grid of possible
 parameter combinations, then run the model with these parameters set
 and calculate the fit statistic (e.g., the AIC) for each
-combination. Since the model code is compiled for compuational speed,
+combination. Since the model code is compiled for computational speed,
 each iteration of this takes roughly 0.001 seconds on a reasonably
-fast laptop. 
+fast laptop. Moreover, the task of the grid search can use multiple
+CPU cores, which has the potential to speed up the model fit.
 
 For the McDonnell model: Since this model utilizes a random effect
 parameter for each individual, as well as 8-10 unique fixed
 parameters, the number of possible combinations of parameters quickly
-escilates to the point where a grid search is not possible. Therefore,
+escalates to the point where a grid search is not possible. Therefore,
 the model is fit repeatedly from different random points, with the
 optima for each random start recorded. Given a high number of random
 starting points, different optima can be found and compared to
@@ -68,9 +76,9 @@ identify the one that gives the best model fit.
 
 These models have been coded in a way that they can be fit to the
 exact same input data. This has been done to facilitate comparisons
-between models when subjects are removed from the dataset.
+between models when subjects are removed from the data set.
 
-First, the data have been archived as SAS formated files with the
+First, the data have been archived as SAS formatted files with the
 following names:
 
 + z9312_epa.sas7bdat
@@ -90,14 +98,14 @@ ozone_files = c(
 ozone_data = readSAS(ozone_files)
 ```
 
-The `readSAS` function will take multiple file names concatonated
+The `readSAS` function will take multiple file names concatenated
 together, allowing us to read one or all of the data into R at once.
 
 ### Subsetting and Formatting Data
 
 The data are formatted for SAS, with multiple rows per
-individual/experiment representing different dFEV1 measument times,
-but with the intervals for changes in O3 or exercize represented by
+individual/experiment representing different dFEV1 measurement times,
+but with the intervals for changes in O3 or exercise represented by
 multiple columns. To fit the models to these data, we need to change
 the format. The function `mungeSAS`
 will re-format the data, but we should first do any subsetting of
@@ -108,7 +116,6 @@ For example, lets say we are only interested in the data from the
 
 ```{r}
 aro_data = subset(ozone_data, STUDY == "ARO")
-
 ```
 
 We can now re-format these data,
@@ -146,3 +153,13 @@ AIC values,
 
 ```{r}
 sapply(results
+```
+
+### Model comparison
+
+Each model produces an estimated AIC value for each parameter
+combination, as well as the log-likelihood. The models can be compared
+directly via the AIC. However, you should be aware the the McDonnell
+model will be penalized rather strongly for having many more
+parameters than the Schelegle model. 
+
