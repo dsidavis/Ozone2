@@ -4,8 +4,8 @@ author: "Matt Espe"
 date: "2 Apr 2019"
 output: pdf_document
 vignette: 
-  %\VignetteIndexEntry{Getting Started}
-  %\VignetteEngine{rmarkdown::render}
+  \VignetteIndexEntry{Getting Started}
+  \VignetteEngine{rmarkdown::render}
   \usepackage[utf8]{inputenc}
 ---
 
@@ -91,9 +91,9 @@ complete file path, to the function `readSAS`,
 ```{r}
 library(OzoneExposure)
 ozone_files = c(
-"~/Downloads/z9312_epa.sas7bdat",
-"~/Downloads/z9312_kim.sas7bdat",
-"~/Downloads/z9312_ucd.sas7bdat")
+    "~/Downloads/z9312_epa.sas7bdat",
+    "~/Downloads/z9312_kim.sas7bdat",
+    "~/Downloads/z9312_ucd.sas7bdat")
 
 ozone_data = readSAS(ozone_files)
 ```
@@ -152,12 +152,6 @@ We can then explore which combination of parameters give us the lowest
 AIC values,
 
 ```{r figure = TRUE}
-par(mfrow=c(3,3))
-sapply(grep("^B", colnames(result), value = TRUE), function(x) plot(result$aic ~ result[[x]]))
-```
-
-
-```{r figure = TRUE}
 par(mfrow=c(2,2))
 sapply(result2[,c("dos","k","a")], function(x) plot(result2$aic ~ x))
 ```
@@ -170,4 +164,49 @@ combination, as well as the log-likelihood. The models can be compared
 directly via the AIC. However, you should be aware the the McDonnell
 model will be penalized rather strongly for having many more
 parameters than the Schelegle model. 
+
+# Model expansion and modification
+
+Writing the models in Stan involved several tradeoffs. The Stan models
+are compiled, which makes the computations much faster compared to
+native R code. However, if you want to modify the models, you need to
+follow these steps:
+
+1. Create .stan code for the model
+2. Compile the model using `stan::stan_model()`
+3. Provide this model as the `model=` argument for the function being
+   run, e.g. `fit_Schelegle`
+   
+Most of the computations in either model is happening in the
+`functions` block of the Stan code, and users would be best focusing
+their modifications there.
+
+## Example: Modifying the model
+
+In this example, we are going to start with the existing models as a
+starting point. We can find where the Stan code for these have been
+saved on our machine with:
+
+```{r}
+system.file("stan_files", "schelegle.stan", package = "OzoneExposure")
+```
+
+We can make a copy of this file, and then start modifying that copy as
+we want. Suppose we saved this modified model to our home directory
+and called it "schelegle_modified.stan", we could compile it with,
+
+```{r eval = FALSE}
+my_mod= rstan::stan_model("~/schelegle_modified.stan")
+```
+
+Then, we can use this modified model in the fitting algorithm by
+substituting the default model,
+
+```{r eval = FALSE} 
+fit = fit_Schelegle(avo_model_data, model = my_mod)
+```
+
+Please note: in the above workflow, the modified model will need to be
+re-compiled for every new R session. 
+
 
