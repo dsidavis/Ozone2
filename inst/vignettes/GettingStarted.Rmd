@@ -155,8 +155,6 @@ AIC values,
 par(mfrow=c(2,2))
 sapply(result2[,c("dos","k","a")], function(x) plot(result2$aic ~ x))
 ```
-
-
 ### Model comparison
 
 Each model produces an estimated AIC value for each parameter
@@ -167,7 +165,7 @@ parameters than the Schelegle model.
 
 # Model expansion and modification
 
-Writing the models in Stan involved several tradeoffs. The Stan models
+Writing the models in Stan involved several trade-offs. The Stan models
 are compiled, which makes the computations much faster compared to
 native R code. However, if you want to modify the models, you need to
 follow these steps:
@@ -209,4 +207,6 @@ fit = fit_Schelegle(avo_model_data, model = my_mod)
 Please note: in the above workflow, the modified model will need to be
 re-compiled for every new R session. 
 
-
+For reference on how to write Stan code, we recommend the resources
+provided by the Stan development team
+[here](https://mc-stan.org/users/documentation/). 
