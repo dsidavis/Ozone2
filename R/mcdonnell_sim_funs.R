@@ -1,4 +1,4 @@
-# Functions for simulating data using the McDonnel et al equations.
+# Functions for simulating data using the McDonnell et al equations.
 
 get_XB5 = function(Cm, Cs, Vs, Ve,
                    BSA, Time,

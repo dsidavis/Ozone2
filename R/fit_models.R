@@ -1,5 +1,5 @@
-fit_McDonnel = function(data, sigma_u = 0.1,
-                        model = OzoneExposure::stanmodels$mcdonnel,
+fit_McDonnell = function(data, sigma_u = 0.1,
+                        model = OzoneExposure::stanmodels$mcdonnell,
                         n_optim = 1L, cores = 1L, ...)
 {
     data = c(data, sigma_U = sigma_u)

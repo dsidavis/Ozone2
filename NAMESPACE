@@ -9,4 +9,4 @@ useDynLib(OzoneExposure, .registration = TRUE)
 
 export(readSAS, mungeSAS)
 export(stanmodels)
-export(fit_McDonnel, fit_Schelegle)
+export(fit_McDonnell, fit_Schelegle)

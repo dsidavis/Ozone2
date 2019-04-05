@@ -14,7 +14,7 @@ exposure to FEV1. Each model attempts to predict the change in FEV1
 }
 \details{
 There are two models available. The first, mcdonnel, is based on the
-papers by McDonnel et al. The second, schelegle, is based on the papers
+papers by McDonnell et al. The second, schelegle, is based on the papers
 by Schelegle et al.
 }
 \source{

@@ -1,18 +1,18 @@
-\name{fit_McDonnel}
-\alias{fit_McDonnel}
+\name{fit_McDonnell}
+\alias{fit_McDonnell}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Fit the model from McDonnel et al.
+Fit the model from McDonnell et al.
 }
 \description{
-This will fit the model from McDonnel using optimization. The default
+This will fit the model from McDonnell using optimization. The default
 arguments will fit the model a single time. However, it might be
 desirable to fit the model multiple times, and evaluate which of the
 optimum is the global optimum. By default, Stan initializes the
 optimizer at random values.
 }
 \usage{
-fit_McDonnel(data, sigma_u = 0.1, model = OzoneExposure::stanmodels$mcdonnel, n_optim = 1L, cores = 1L, ...)
+fit_McDonnel(data, sigma_u = 0.1, model = OzoneExposure::stanmodels$mcdonnell, n_optim = 1L, cores = 1L, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -67,7 +67,7 @@ Matt Espe
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function (data, sigma_u = 0.1, model = OzoneExposure::stanmodels$mcdonnel, 
+function (data, sigma_u = 0.1, model = OzoneExposure::stanmodels$mcdonnell, 
     n_optim = 1L, cores = 1L, ...) 
 {
     data = c(data, sigma_U = sigma_u)

@@ -134,7 +134,7 @@ The list object created by `mungeSAS` can directly be fed into a
 model, for example the McDonnell model;
 
 ```{r}
-result = fit_McDonnel(aro_model_data, n_optim = 100)
+result = fit_McDonnell(aro_model_data, n_optim = 100)
 min(result$aic)
 ```
 
