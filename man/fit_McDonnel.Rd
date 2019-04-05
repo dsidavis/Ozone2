@@ -12,7 +12,7 @@ optimum is the global optimum. By default, Stan initializes the
 optimizer at random values.
 }
 \usage{
-fit_McDonnel(data, sigma_u = 0.1, model = OzoneExposure::stanmodels$mcdonnell, n_optim = 1L, cores = 1L, ...)
+fit_McDonnell(data, sigma_u = 0.1, model = OzoneExposure::stanmodels$mcdonnell, n_optim = 1L, cores = 1L, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

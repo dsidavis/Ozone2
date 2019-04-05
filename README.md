@@ -16,3 +16,12 @@ of notable advantages:
 1. The models calculate the AIC, using the same calculation and
    functions for the log-likelihood.
 
+## Installation
+
+The easiest method is to install directly from github using the
+devtools package by running:
+
+```
+devtools::install_github("dsidavis/Ozone2")
+```
+
