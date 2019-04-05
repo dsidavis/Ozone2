@@ -134,7 +134,7 @@ The list object created by `mungeSAS` can directly be fed into a
 model, for example the McDonnell model;
 
 ```{r}
-result = fit_McDonnel(aro_model_data, n_optim = 10)
+result = fit_McDonnel(aro_model_data, n_optim = 100)
 min(result$aic)
 ```
 
@@ -151,9 +151,17 @@ result2[which.min(result2$aic),]
 We can then explore which combination of parameters give us the lowest
 AIC values,
 
-```{r}
-sapply(results
+```{r figure = TRUE}
+par(mfrow=c(3,3))
+sapply(grep("^B", colnames(result), value = TRUE), function(x) plot(result$aic ~ result[[x]]))
 ```
+
+
+```{r figure = TRUE}
+par(mfrow=c(2,2))
+sapply(result2[,c("dos","k","a")], function(x) plot(result2$aic ~ x))
+```
+
 
 ### Model comparison
 

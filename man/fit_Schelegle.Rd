@@ -10,7 +10,7 @@ number of parameters is relatively small and the response surface has
 many local optimum, this function conducts a grid search.
 }
 \usage{
-fit_Schelegle(data, bounds = list(dos = c(5, 2500), a = c(-0.2, 0), k = c(0, 0.2), sigma = c(0.01, 5)), n_interval = 50L, model = OzoneExposure::stanmodels$schelegle, cores = 1L)
+fit_Schelegle(data, bounds = list(dos = c(5, 2500), a = c(-0.2, -1e-5), k = c(1e-6, 0.2), sigma = c(1e-5, 5)), n_interval = 50L, model = OzoneExposure::stanmodels$schelegle, cores = 1L, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -33,6 +33,9 @@ a compiled Stan model
 the number of CPU cores to use. On OSX and Linux, any value > 1 will
 result in parallel computations. Currently, parallel ops are not
 available under Windows.
+}
+\item{...}{
+  Additional arguments passed to \code{rstan::sampling}
 }
 }
 \details{

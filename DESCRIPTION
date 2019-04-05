@@ -23,6 +23,8 @@ Imports:
     rstantools (>= 1.5.1),
 	parallel,
 	haven
+Suggests:
+	rmarkdown
 LinkingTo: 
     BH (>= 1.69.0-1),
     Rcpp (>= 1.0.1),
