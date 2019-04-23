@@ -23,7 +23,12 @@ fit_Schelegle = function(data,
                          cores = 1L, ...)
 {
     grid = expand_bounds(bounds, n_interval)
-       
+
+    if(!is.null(data$U_dos) & model@model_name == "schelegle"){
+        message("Individual level effects detected - using random effects model")
+        model = OzoneExposure::stanmodels$schelegle_ind_effects
+    }
+        
     if(cores > 1){
         cl = makeCluster(cores, "FORK")
         on.exit(stopCluster(cl))
@@ -43,8 +48,6 @@ fit_eds = function(mod, data, pars, ...)
                           iter = 1, chains = 1, ...)
     rstan::extract(fit, pars = "aic")$aic
 }
-
-
         
 expand_bounds = function(b, n)
 {

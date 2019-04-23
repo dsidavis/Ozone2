@@ -121,6 +121,7 @@ generated quantities{
   real aic;
   for(n in 1:n_obs){
 	int idx = n_timepts[n];
+	int n_meas = max(Time[n][:idx]);
 	vector[n_meas] pred_fev1 = experimentFEV1(Cm[n][:idx],
 											  Ve[n][:idx], Time[n][:idx],
 											  exp(dos + U_dos[ind[n]]),
