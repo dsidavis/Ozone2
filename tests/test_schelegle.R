@@ -37,4 +37,4 @@ data_list = list(max_timepts = length(time),
 
 # rstan::stan_rdump(names(data_list), file = "test_schelegle.rdump", envir = as.environment(data_list))
 mod = rstan::stan_model("../src/stan_files/schelegle2.stan")
-rstan::optimizing(mod, data = data_list, verbose = TRUE)
+rstan::sampling(mod, data = data_list, verbose = TRUE)#, init = list(sigma = 0.1, U_a = as.array(1e-5), U_dos = as.array(1e-5), U_a = as.array(1e-5)), chains = 1)
