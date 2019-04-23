@@ -47,7 +47,7 @@ functions{
 	real CumFrDos = 0;
 	real FrDos = 0;
 
- 	for(i in 2:n){
+	for(i in 2:n){
 	  real uos;
 	  dr = full_o3[i] * full_ve[i] * 1.96;
 	  FrDos = dr / dos;
@@ -80,6 +80,9 @@ data{
   real k;
   real dos;
   real a;
+  vector[n_ind] U_dos;
+  vector[n_ind] U_k;
+  vector[n_ind] U_a;
   real<lower = 0> sigma;
 }
 
@@ -96,10 +99,10 @@ model{
 	int idx = n_timepts[n];
 	int n_meas = max(Time[n][:idx]);
 	vector[n_meas] pred_fev1 = experimentFEV1(Cm[n][:idx],
-											  Ve[n][:idx], Time[n][:idx],
-											  exp(dos),
-											  exp(k),
-											  -1 * exp(a));
+										   Ve[n][:idx], Time[n][:idx],
+										   exp(dos + U_dos[ind[n]]),
+										   exp(k + U_k[ind[n]]),
+										   -1 * exp(a + U_a[ind[n]]));
 	// "A" is supposed to be negative, but exp(a) is strictly positive
 	
 	int comp_idx[n_dFEV1[n]] = Time[n][dFEV1_measure_idx[n][:n_dFEV1[n]]];
@@ -118,17 +121,20 @@ generated quantities{
   real aic;
   for(n in 1:n_obs){
 	int idx = n_timepts[n];
-	vector[idx] pred_fev1 = experimentFEV1(Cm[n][:idx],
-							   Ve[n][:idx], Time[n][:idx],
-										   exp(dos), exp(k), -1 * exp(a));
+	vector[n_meas] pred_fev1 = experimentFEV1(Cm[n][:idx],
+											  Ve[n][:idx], Time[n][:idx],
+											  exp(dos + U_dos[ind[n]]),
+											  exp(k + U_k[ind[n]]),
+											  -1 * exp(a + U_a[ind[n]]));
 
 	int comp_idx[n_dFEV1[n]] = Time[n][dFEV1_measure_idx[n][:n_dFEV1[n]]];
 
 	// Likelihood
-	log_lik += normal_lpdf(dFEV1[n][:n_dFEV1[n]] | pred_fev1[comp_idx] * -1, sigma);
+	log_lik += normal_lpdf(dFEV1[n][:n_dFEV1[n]] | pred_fev1[comp_idx], sigma);
   }
 
   aic = (2 * 3  *       // dos, k, a
+		 3 * n_ind +    // rand effects
 		 1) -           // sigma
 	2 * log_lik;
 }
