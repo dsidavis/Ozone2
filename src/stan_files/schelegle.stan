@@ -77,9 +77,9 @@ data{
   int dFEV1_measure_idx[n_obs, max_n_dFEV1];
   vector[max_n_dFEV1] dFEV1[n_obs];
   // parameters
-  real k;
-  real dos;
-  real a;
+  real<lower=0> k;
+  real<lower=0> dos;
+  real<lower=0> a;
   real<lower = 0> sigma;
 }
 

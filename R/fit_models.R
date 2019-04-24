@@ -16,8 +16,8 @@ fit_McDonnell = function(data, sigma_u = 0.1,
 }
 
 fit_Schelegle = function(data,
-                         bounds = list(dos = c(5, 2500), a = c(-0.2, -1e-5),
-                                       k = c(1e-6, 0.2), sigma = c(1e-5,5)),
+                         bounds = list(dos = log(c(5, 2500)), a = log(c(0.2, 1e-5)),
+                                       k = log(c(1e-6, 0.2)), sigma = c(1e-5,5)),
                          n_interval = 50L,
                          model = OzoneExposure::stanmodels$schelegle,
                          cores = 1L, ...)
