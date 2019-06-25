@@ -7,12 +7,28 @@ fit_McDonnell = function(data, sigma_u = 0.1,
         cl = makeCluster(cores, "FORK")
         on.exit(stopCluster(cl))
         ans = parSapply(cl, seq(n_optim), function(i)
+            suppressMessages(rstan::optimizing(model, data, ...)$par))
+    } else 
+        suppressMessages({ans = replicate(n_optim, rstan::optimizing(model, data, ...)$par)})
+    
+    as.data.frame(t(ans))
+            
+}
+
+fit_Schelegle_integral = function(data, sigma_u = 0.1,
+                        model = OzoneExposure::stanmodels$schelegle2,
+                        n_optim = 1L, cores = 1L, ...)
+{
+    data = c(data, sigma_U = sigma_u)
+    if(cores > 1){
+        cl = makeCluster(cores, "FORK")
+        on.exit(stopCluster(cl))
+        ans = parSapply(cl, seq(n_optim), function(i)
             rstan::optimizing(model, data, ...)$par)
     } else 
         ans = replicate(n_optim, rstan::optimizing(model, data, ...)$par)
     
     as.data.frame(t(ans))
-            
 }
 
 fit_Schelegle = function(data,
@@ -55,8 +71,8 @@ expand_bounds = function(b, n)
         stop("Please specify the bounds as the upper and lower bounds for each parameter")
     if(is.null(names(b)) | !all(names(b) %in% c("dos","a","k","sigma")))
         stop("Please provide bounds with the names 'dos','a','k','sigma'")
-    if(any(b$k <= 0))
-        stop("The rate, 'k', cannot be less than or equal to zero")
+    # if(any(b$k <= 0))
+    #     stop("The rate, 'k', cannot be less than or equal to zero")
     tmp = lapply(b, function(x)
         seq(x[1], x[2], length.out = n))
     expand.grid(tmp)
