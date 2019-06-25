@@ -93,7 +93,9 @@ parameters{
 }
 
 model{
+  // Don't need to do this calculation if we are doing a grid search
   
+  /*
   for(n in 1:n_obs){
 	
 	int idx = n_timepts[n];
@@ -107,13 +109,14 @@ model{
 	
 	int comp_idx[n_dFEV1[n]] = Time[n][dFEV1_measure_idx[n][:n_dFEV1[n]]];
 
-	/* Likelihood
-	   Need to convert dFEV1 to negative numbers since the Schelegle model
-	   assumes dFEV1 is negative ("A" is negative), while the 
-	   McDonnell model assumes it is positive.
-	*/
-	dFEV1[n][:n_dFEV1[n]] ~ normal(pred_fev1[comp_idx] * -1, sigma);
-  }  
+	Likelihood
+	Need to convert dFEV1 to negative numbers since the Schelegle model
+	assumes dFEV1 is negative ("A" is negative), while the 
+	McDonnell model assumes it is positive.
+  
+	   dFEV1[n][:n_dFEV1[n]] ~ normal(pred_fev1[comp_idx] * -1, sigma);
+	}
+*/
 }
 
 generated quantities{
