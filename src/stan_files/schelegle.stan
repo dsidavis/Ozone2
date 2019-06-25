@@ -77,13 +77,16 @@ data{
   int dFEV1_measure_idx[n_obs, max_n_dFEV1];
   vector[max_n_dFEV1] dFEV1[n_obs];
   // parameters
-  real<lower=0> k;
-  real<lower=0> dos;
-  real<lower=0> a;
+  real k;
+  real dos;
+  real a;
   real<lower = 0> sigma;
 }
 
-transformed data{ 
+transformed data{
+  real e_dos = exp(dos);
+  real e_k = exp(k);
+  real e_a = exp(a);
 }
 
 parameters{
@@ -91,26 +94,26 @@ parameters{
 
 model{
   
-  for(n in 1:n_obs){
+  /* for(n in 1:n_obs){ */
 	
-	int idx = n_timepts[n];
-	int n_meas = max(Time[n][:idx]);
-	vector[n_meas] pred_fev1 = experimentFEV1(Cm[n][:idx],
-											  Ve[n][:idx], Time[n][:idx],
-											  exp(dos),
-											  exp(k),
-											  -1 * exp(a));
-	// "A" is supposed to be negative, but exp(a) is strictly positive
+  /* 	int idx = n_timepts[n]; */
+  /* 	int n_meas = max(Time[n][:idx]); */
+  /* 	vector[n_meas] pred_fev1 = experimentFEV1(Cm[n][:idx], */
+  /* 											  Ve[n][:idx], Time[n][:idx], */
+  /* 											  exp(dos), */
+  /* 											  exp(k), */
+  /* 											  -1 * exp(a)); */
+  /* 	// "A" is supposed to be negative, but exp(a) is strictly positive */
 	
-	int comp_idx[n_dFEV1[n]] = Time[n][dFEV1_measure_idx[n][:n_dFEV1[n]]];
+  /* 	int comp_idx[n_dFEV1[n]] = Time[n][dFEV1_measure_idx[n][:n_dFEV1[n]]]; */
 
-	/* Likelihood
-	   Need to convert dFEV1 to negative numbers since the Schelegle model
-	   assumes dFEV1 is negative ("A" is negative), while the 
-	   McDonnell model assumes it is positive.
-	*/
-	dFEV1[n][:n_dFEV1[n]] ~ normal(pred_fev1[comp_idx] * -1, sigma);
-  }  
+  /* 	/\* Likelihood */
+  /* 	   Need to convert dFEV1 to negative numbers since the Schelegle model */
+  /* 	   assumes dFEV1 is negative ("A" is negative), while the  */
+  /* 	   McDonnell model assumes it is positive. */
+  /* 	*\/ */
+  /* 	dFEV1[n][:n_dFEV1[n]] ~ normal(pred_fev1[comp_idx] * -1, sigma); */
+  /* }   */
 }
 
 generated quantities{
@@ -118,9 +121,10 @@ generated quantities{
   real aic;
   for(n in 1:n_obs){
 	int idx = n_timepts[n];
-	vector[idx] pred_fev1 = experimentFEV1(Cm[n][:idx],
-							   Ve[n][:idx], Time[n][:idx],
-										   exp(dos), exp(k), -1 * exp(a));
+	int n_meas = max(Time[n][:idx]);
+	vector[n_meas] pred_fev1 = experimentFEV1(Cm[n][:idx],
+										   Ve[n][:idx], Time[n][:idx],
+											  e_dos, e_k, -1 * e_a);
 
 	int comp_idx[n_dFEV1[n]] = Time[n][dFEV1_measure_idx[n][:n_dFEV1[n]]];
 
